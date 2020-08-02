@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -79,7 +80,9 @@ public class CompanyController {
             String line [] = scanner.nextLine().split(";");
             products.add(new Product(
                     Integer.valueOf(line[0]),line[1],
-                    Category.valueOf(line[2]),
+                    Arrays.stream(Category.values())
+                            .filter(category -> category.getCategoryName().equals(line[2]))
+                            .findAny().get(),
                     Double.valueOf(line[3]),Integer.valueOf(line[4])));
         }
     }
@@ -91,6 +94,10 @@ public class CompanyController {
         tc_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         // przekazanie wartości do tabeli z ObservableList
         tbl_products.setItems(products);
+    }
+    public void initialize() throws FileNotFoundException {
+        getProductsFromFile();
+        setProductsIntoTable();
     }
 
     @FXML
