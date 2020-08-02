@@ -6,16 +6,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Category;
@@ -27,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class CompanyController {
@@ -102,7 +100,51 @@ public class CompanyController {
     }
 
     @FXML
-    void addAction(ActionEvent event) { }
+    void addAction(ActionEvent event) {
+        Dialog<Product> dialog = new Dialog<>();
+        dialog.setTitle("Dodaj produkt");
+        dialog.setHeaderText("Dodaj produkt");
+        // ustawienie kontrolek
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField tf_productName = new TextField();
+        tf_productName.setPromptText("nazwa");
+        ComboBox<Category> combo_productCategory = new ComboBox<>();
+        combo_productCategory.setItems(FXCollections.observableArrayList(Category.values()));
+        combo_productCategory.setPromptText("kategoria");
+        TextField tf_productPrice = new TextField();
+        tf_productPrice.setPromptText("cena");
+        TextField tf_productQuantity = new TextField();
+        tf_productQuantity.setPromptText("ilość");
+
+        grid.add(tf_productName, 0, 0);
+        grid.add(combo_productCategory, 0, 1);
+        grid.add(tf_productPrice, 0, 2);
+        grid.add(tf_productQuantity, 0, 3);
+
+        dialog.getDialogPane().setContent(grid);
+        // przyciski
+        ButtonType btn_ok = new ButtonType("Dodaj", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btn_ok);
+
+        Optional<Product> productOpt = dialog.showAndWait();
+        if(productOpt.isPresent()) {
+            if(!tf_productPrice.getText().matches("[0-9]+\\.[0-9]{0,2}") ||
+                    !tf_productQuantity.getText().matches("[0-9]+")){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd danych");
+                alert.setHeaderText("Błąd danych. Produkt nie został dodany!");
+                alert.showAndWait();
+            } else {
+                products.add(new Product(products.stream().mapToInt(p -> p.getId()).max().getAsInt() + 1,
+                        tf_productName.getText(), combo_productCategory.getValue(),
+                        Double.valueOf(tf_productPrice.getText()), Integer.valueOf(tf_productQuantity.getText())));
+            }
+        }
+    }
     @FXML
     void deleteAction(ActionEvent event) { }
     @FXML
