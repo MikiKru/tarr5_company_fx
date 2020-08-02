@@ -80,9 +80,10 @@ public class CompanyController {
             String line [] = scanner.nextLine().split(";");
             products.add(new Product(
                     Integer.valueOf(line[0]),line[1],
-                    Arrays.stream(Category.values())
-                            .filter(category -> category.getCategoryName().equals(line[2]))
-                            .findAny().get(),
+                    Arrays.stream(Category.values())                                        // Category []
+                            .filter(category -> category.getCategoryName().equals(line[2])) // filtrowanie po nazwie kategorii
+                            .findAny()                                                      // Optional<Category>
+                            .get(),                                                          // Category
                     Double.valueOf(line[3]),Integer.valueOf(line[4])));
         }
     }
