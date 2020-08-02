@@ -48,12 +48,12 @@ public class CompanyController {
         Stage primaryStage = new Stage();
         Parent parent = FXMLLoader.load(getClass().getResource("/view/loginView.fxml"));
         primaryStage.setTitle("Logowanie");             // tytuł okna
-        primaryStage.setResizable(false);               // brak skalowania
+//        primaryStage.setResizable(false);               // brak skalowania
         primaryStage.setScene(new Scene(parent));
         primaryStage.show();
         // zamknięcie okna logowania na obiekcie typu Stage
-        Stage loginStage = (Stage) btn_delete.getScene().getWindow();
-        loginStage.close();
+        Stage companyStage = (Stage) btn_delete.getScene().getWindow();
+        companyStage.close();
     }
     @FXML
     void closeAction(ActionEvent event) {

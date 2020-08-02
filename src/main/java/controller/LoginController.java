@@ -36,8 +36,8 @@ public class LoginController {
             Stage primaryStage = new Stage();
             Parent parent = FXMLLoader.load(getClass().getResource("/view/companyView.fxml"));
             primaryStage.setTitle("Aplikacja magazynowa");  // tytuł okna
-            primaryStage.setResizable(false);               // brak skalowania
-            primaryStage.initStyle(StageStyle.UNDECORATED); // brak przyciksków w tytule okna
+//            primaryStage.setResizable(false);               // brak skalowania
+//            primaryStage.initStyle(StageStyle.UNDECORATED); // brak przyciksków w tytule okna
             primaryStage.setScene(new Scene(parent));
             primaryStage.show();
             // zamknięcie okna logowania na obiekcie typu Stage
