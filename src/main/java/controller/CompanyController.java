@@ -132,7 +132,7 @@ public class CompanyController {
 
         Optional<Product> productOpt = dialog.showAndWait();
         if(productOpt.isPresent()) {
-            if(!tf_productPrice.getText().matches("[0-9]+\\.[0-9]{0,2}") ||
+            if(!tf_productPrice.getText().matches("[0-9]+\\.{0,1}[0-9]{0,2}") ||
                     !tf_productQuantity.getText().matches("[0-9]+")){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Błąd danych");
