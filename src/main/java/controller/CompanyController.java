@@ -14,6 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -69,7 +70,6 @@ public class CompanyController {
         Platform.exit();
     }
     private ObservableList<Product> products = FXCollections.observableArrayList();
-    
     private void getProductsFromFile() throws FileNotFoundException {
         String path = Paths.get("").toAbsolutePath().toString()+
                 "\\src\\main\\java\\utility\\products.csv";
@@ -84,7 +84,13 @@ public class CompanyController {
         }
     }
     private void setProductsIntoTable(){
-
+        // konfiguracja wartości wporwadzanych do tabeli z pól klasy modelu Product
+        tc_name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tc_category.setCellValueFactory(new PropertyValueFactory<>("category"));
+        tc_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tc_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        // przekazanie wartości do tabeli z ObservableList
+        tbl_products.setItems(products);
     }
 
     @FXML
