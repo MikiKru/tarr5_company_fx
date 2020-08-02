@@ -1,6 +1,8 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,20 +17,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.Category;
+import model.Product;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.Scanner;
 
 public class CompanyController {
     @FXML
-    private TableView<?> tbl_products;
+    private TableView<Product> tbl_products;
     @FXML
-    private TableColumn<?, ?> tc_name;
+    private TableColumn<Product, String> tc_name;
     @FXML
-    private TableColumn<?, ?> tc_category;
+    private TableColumn<Product, String> tc_category;
     @FXML
-    private TableColumn<?, ?> tc_price;
+    private TableColumn<Product, Double> tc_price;
     @FXML
-    private TableColumn<?, ?> tc_quantity;
+    private TableColumn<Product, Integer> tc_quantity;
     @FXML
     private TextField tf_search;
     @FXML
@@ -58,6 +67,24 @@ public class CompanyController {
     @FXML
     void closeAction(ActionEvent event) {
         Platform.exit();
+    }
+    private ObservableList<Product> products = FXCollections.observableArrayList();
+    
+    private void getProductsFromFile() throws FileNotFoundException {
+        String path = Paths.get("").toAbsolutePath().toString()+
+                "\\src\\main\\java\\utility\\products.csv";
+        Scanner scanner = new Scanner(new File(path));
+        scanner.nextLine(); // pominięcie nagłówka w pliku .csv
+        while (scanner.hasNextLine()){
+            String line [] = scanner.nextLine().split(";");
+            products.add(new Product(
+                    Integer.valueOf(line[0]),line[1],
+                    Category.valueOf(line[2]),
+                    Double.valueOf(line[3]),Integer.valueOf(line[4])));
+        }
+    }
+    private void setProductsIntoTable(){
+
     }
 
     @FXML
