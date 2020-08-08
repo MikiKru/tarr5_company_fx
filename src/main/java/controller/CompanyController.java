@@ -189,16 +189,51 @@ public class CompanyController {
     }
     @FXML
     void filterAction(ActionEvent event) {
+        // filtrowanie po nazwie
         ObservableList<Product> filteredProducts = FXCollections.observableArrayList(
                 products.stream()
                     .filter(product -> product.getName().toLowerCase().contains(tf_search.getText().toLowerCase()))
                     .collect(Collectors.toList()));
         if(combo_category.getValue() != null) {
+        // filtrowanie po kategorii
             filteredProducts = FXCollections.observableArrayList(filteredProducts.stream()
                     .filter(product -> product.getCategory().equals(combo_category.getValue()))
                     .collect(Collectors.toList()));
         }
-        tbl_products.setItems(filteredProducts);
+        // filtrowanie po ilości
+        ObservableList<Product> productsToFilter = FXCollections.observableArrayList();
+        if(cb_less5.isSelected()){
+            productsToFilter.addAll(FXCollections.observableArrayList(filteredProducts.stream()
+                    .filter(product -> product.getQuantity() < 5)
+                    .collect(Collectors.toList())));
+        }
+        if(cb_medium.isSelected()){
+            productsToFilter.addAll(FXCollections.observableArrayList(filteredProducts.stream()
+                    .filter(product -> product.getQuantity() >= 5 && product.getQuantity() <= 10)
+                    .collect(Collectors.toList())));
+        }
+        if(cb_more10.isSelected()){
+            productsToFilter.addAll(FXCollections.observableArrayList(filteredProducts.stream()
+                    .filter(product -> product.getQuantity() > 10)
+                    .collect(Collectors.toList())));
+        }
+        ObservableList<Product> finalFilter = FXCollections.observableArrayList();
+        for (Product p1 : productsToFilter) {
+            for (Product p2 : filteredProducts) {
+                if(p1.equals(p2)){
+                    finalFilter.add(p1);
+                }
+            }
+        }
+        tbl_products.setItems(finalFilter);
+
+
+        // czyszczenie pól
+        tf_search.clear();
+        combo_category.setValue(null);
+        cb_less5.setSelected(true);
+        cb_medium.setSelected(true);
+        cb_more10.setSelected(true);
     }
     @FXML
     void updateAction(ActionEvent event) { }
