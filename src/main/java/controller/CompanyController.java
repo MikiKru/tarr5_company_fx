@@ -20,6 +20,7 @@ import model.Product;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class CompanyController {
+    private String path = Paths.get("").toAbsolutePath().toString()+
+            "\\src\\main\\java\\utility\\products.csv";
     @FXML
     private TableView<Product> tbl_products;
     @FXML
@@ -64,14 +67,13 @@ public class CompanyController {
         Stage companyStage = (Stage) btn_delete.getScene().getWindow();
         companyStage.close();
     }
+
     @FXML
     void closeAction(ActionEvent event) {
         Platform.exit();
     }
     private ObservableList<Product> products = FXCollections.observableArrayList();
     private void getProductsFromFile() throws FileNotFoundException {
-        String path = Paths.get("").toAbsolutePath().toString()+
-                "\\src\\main\\java\\utility\\products.csv";
         Scanner scanner = new Scanner(new File(path));
         scanner.nextLine(); // pominięcie nagłówka w pliku .csv
         while (scanner.hasNextLine()){
@@ -100,7 +102,7 @@ public class CompanyController {
     }
 
     @FXML
-    void addAction(ActionEvent event) {
+    void addAction(ActionEvent event) throws IOException {
         Dialog<Product> dialog = new Dialog<>();
         dialog.setTitle("Dodaj produkt");
         dialog.setHeaderText("Dodaj produkt");
@@ -142,8 +144,28 @@ public class CompanyController {
                 products.add(new Product(products.stream().mapToInt(p -> p.getId()).max().getAsInt() + 1,
                         tf_productName.getText(), combo_productCategory.getValue(),
                         Double.valueOf(tf_productPrice.getText()), Integer.valueOf(tf_productQuantity.getText())));
+                saveToFile();
             }
         }
+    }
+    public void saveToFile() throws IOException {
+        FileWriter pw = new FileWriter(new File(path));
+        pw.write("id;nazwa;kategoria;cena;lość");
+        String format = "";
+        for (Product product : products) {
+            format = "\n" +
+                    String.format(
+                            Locale.US,
+                            "%d;%s;%s;%.2f;%d",
+                            product.getId(),
+                            product.getName(),
+                            product.getCategory().getCategoryName(),
+                            product.getPrice(),
+                            product.getQuantity()
+                    );
+            pw.write(format);
+        }
+        pw.close();
     }
     @FXML
     void deleteAction(ActionEvent event) { }
