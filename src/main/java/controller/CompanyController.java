@@ -151,9 +151,8 @@ public class CompanyController {
     public void saveToFile() throws IOException {
         FileWriter pw = new FileWriter(new File(path));
         pw.write("id;nazwa;kategoria;cena;lość");
-        String format = "";
         for (Product product : products) {
-            format = "\n" +
+            pw.write("\n" +
                     String.format(
                             Locale.US,
                             "%d;%s;%s;%.2f;%d",
@@ -162,8 +161,7 @@ public class CompanyController {
                             product.getCategory().getCategoryName(),
                             product.getPrice(),
                             product.getQuantity()
-                    );
-            pw.write(format);
+                    ));
         }
         pw.close();
     }
