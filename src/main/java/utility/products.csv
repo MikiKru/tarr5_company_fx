@@ -1,4 +1,5 @@
-id;nazwa;kategoria;cena;loÅ›Ä‡
-1;2.0 TDI (150KM);silnik;15000.00;2
-2;reflektor BMW X3 (lewy);karoseria;6000.00;10
-3;koÅ‚o dojazdowe;zawieszenie;125.50;5
+id;nazwa;kategoria;cena;lo¶æ
+1;2.0 TDI (150KM);silnik;15000,00;2
+2;reflektor BMW X3 (lewy);karoseria;6000,00;10
+3;felga 19' ALU;zawieszenie;555,55;5
+4;ko³o 19' Pirelli;zawieszenie;5000,00;4

@@ -18,10 +18,7 @@ import javafx.stage.StageStyle;
 import model.Category;
 import model.Product;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
@@ -84,7 +81,7 @@ public class CompanyController {
                             .filter(category -> category.getCategoryName().equals(line[2])) // filtrowanie po nazwie kategorii
                             .findAny()                                                      // Optional<Category>
                             .get(),                                                          // Category
-                    Double.valueOf(line[3]),Integer.valueOf(line[4])));
+                    Double.valueOf(line[3].replace(",",".")),Integer.valueOf(line[4])));
         }
     }
     private void setProductsIntoTable(){
@@ -149,17 +146,17 @@ public class CompanyController {
         }
     }
     public void saveToFile() throws IOException {
-        FileWriter pw = new FileWriter(new File(path));
-        pw.write("id;nazwa;kategoria;cena;lość");
+        PrintWriter pw = new PrintWriter(new File(path), "ISO-8859-2");
+        pw.println("id;nazwa;kategoria;cena;lość");
         for (Product product : products) {
-            pw.write("\n" +
+            pw.println(
                     String.format(
                             Locale.US,
-                            "%d;%s;%s;%.2f;%d",
+                            "%d;%s;%s;%s;%d",
                             product.getId(),
                             product.getName(),
                             product.getCategory().getCategoryName(),
-                            product.getPrice(),
+                            String.format("%.2f",product.getPrice()).replace(".",","),
                             product.getQuantity()
                     ));
         }
