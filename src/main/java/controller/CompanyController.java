@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class CompanyController {
     private String path = Paths.get("").toAbsolutePath().toString()+
@@ -47,7 +48,7 @@ public class CompanyController {
     @FXML
     private CheckBox cb_more10;
     @FXML
-    private ComboBox<?> combo_category;
+    private ComboBox<Category> combo_category;
     @FXML
     private Button btn_update;
     @FXML
@@ -96,6 +97,8 @@ public class CompanyController {
     public void initialize() throws FileNotFoundException {
         getProductsFromFile();
         setProductsIntoTable();
+        // wprowadzenie kategorii do combobox
+        combo_category.setItems(FXCollections.observableArrayList(Category.values()));
     }
 
     @FXML
@@ -146,8 +149,8 @@ public class CompanyController {
         }
     }
     public void saveToFile() throws IOException {
-        PrintWriter pw = new PrintWriter(new File(path), "ISO-8859-2");
-        pw.println("id;nazwa;kategoria;cena;lość");
+        PrintWriter pw = new PrintWriter(new File(path));
+        pw.println("id;nazwa;kategoria;cena;ilosc");
         for (Product product : products) {
             pw.println(
                     String.format(
@@ -185,7 +188,18 @@ public class CompanyController {
         }
     }
     @FXML
-    void filterAction(ActionEvent event) { }
+    void filterAction(ActionEvent event) {
+        ObservableList<Product> filteredProducts = FXCollections.observableArrayList(
+                products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(tf_search.getText().toLowerCase()))
+                    .collect(Collectors.toList()));
+        if(combo_category.getValue() != null) {
+            filteredProducts = FXCollections.observableArrayList(filteredProducts.stream()
+                    .filter(product -> product.getCategory().equals(combo_category.getValue()))
+                    .collect(Collectors.toList()));
+        }
+        tbl_products.setItems(filteredProducts);
+    }
     @FXML
     void updateAction(ActionEvent event) { }
 }
