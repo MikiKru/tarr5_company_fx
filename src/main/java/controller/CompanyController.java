@@ -163,11 +163,29 @@ public class CompanyController {
         pw.close();
     }
     @FXML
-    void deleteAction(ActionEvent event) { }
+    void deleteAction(ActionEvent event) throws IOException {
+        Product product = tbl_products.getSelectionModel().getSelectedItem();
+        if(product != null) {
+            products.remove(product);
+            saveToFile();           // aktualizacja pliku
+            setProductsIntoTable(); // aktualizacja tabeli
+            btn_delete.setDisable(true);
+            btn_update.setDisable(true);
+        }
+    }
+    @FXML   // akcja zaznaczenia rekordu w tabelce
+    void selectAction(MouseEvent event) {
+        Product product = tbl_products.getSelectionModel().getSelectedItem(); // odwołanie do obiektu zaznaczonego w tabeli
+        if(product != null){
+            btn_delete.setDisable(false);
+            btn_update.setDisable(false);
+        } else {
+            btn_delete.setDisable(true);
+            btn_update.setDisable(true);
+        }
+    }
     @FXML
     void filterAction(ActionEvent event) { }
-    @FXML
-    void selectAction(MouseEvent event) { }
     @FXML
     void updateAction(ActionEvent event) { }
 }
