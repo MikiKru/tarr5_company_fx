@@ -20,6 +20,7 @@ import model.Product;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
@@ -94,6 +95,20 @@ public class CompanyController {
         tc_name.setCellValueFactory(new PropertyValueFactory<>("name"));
         tc_category.setCellValueFactory(new PropertyValueFactory<>("category"));
         tc_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        // format walutowy
+        Locale locale = new Locale("pl", "PL");
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+        tc_price.setCellFactory(tc -> new TableCell<Product, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
         tc_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         // przekazanie wartości do tabeli z ObservableList
         tbl_products.setItems(products);
